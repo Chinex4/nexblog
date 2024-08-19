@@ -1,6 +1,7 @@
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Link, useForm } from "@inertiajs/react";
 import React from "react";
+import DeleteBlogPost from "./Partials/DeleteBlogPost";
 
 const Show = ({ blog, auth }) => {
     const { delete: destroy } = useForm();
@@ -8,7 +9,7 @@ const Show = ({ blog, auth }) => {
         e.preventDefault();
 
         if (confirm("Are you sure you want to delete this blog?")) {
-            destroy(`/blogs/${blog.id}`, {
+            destroy(route("blogs.destroy"), {
                 onSuccess: () => alert("Blog deleted successfully!"),
             });
         }
@@ -31,7 +32,18 @@ const Show = ({ blog, auth }) => {
                 </h2>
             }
         >
-            <div className="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8 text-white space-y-6">
+            <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white space-y-6">
+                <div className="overflow-hidden">
+                    <img
+                        className="rounded-md"
+                        src={
+                            blog.image
+                                ? `../../storage/${blog.image}`
+                                : "../../images/default-blog.jpg"
+                        }
+                        alt="blog-image"
+                    />
+                </div>
                 <h1 className="text-xl lg:text-3xl uppercase font-bold">
                     {blog.title}
                 </h1>
@@ -41,14 +53,14 @@ const Show = ({ blog, auth }) => {
                 <div className="space-x-3">
                     <Link
                         href="/blogs"
-                        className="bg-slate-600 rounded px-4 py-2 hover:bg-slate-600/50 transition-all duration-300"
+                        className="inline-flex items-center px-4 py-2 bg-slate-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-500/25 active:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
                     >
                         Go Back
                     </Link>
                     <Link
                         href=""
                         onClick={handleShare}
-                        className="bg-green-600 rounded px-4 py-2 hover:bg-green-600/50 transition-all duration-300"
+                        className="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-500/25 active:bg-green-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
                     >
                         Share
                     </Link>
@@ -56,17 +68,16 @@ const Show = ({ blog, auth }) => {
                         <>
                             <Link
                                 href={`/blogs/${blog.id}/edit`}
-                                className="bg-blue-600 rounded px-4 py-2 hover:bg-blue-600/50 transition-all duration-300"
+                                className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500/25 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150ion-300"
                             >
                                 Edit
                             </Link>
-                            <Link
-                                href=""
-                                onClick={handleDelete}
-                                className="bg-red-600 rounded px-4 py-2 hover:bg-red-600/50 transition-all duration-300"
-                            >
-                                Delete
-                            </Link>
+                            <div className="inline-block">
+                                <DeleteBlogPost
+                                    className="max-w-xl"
+                                    blog={blog}
+                                />
+                            </div>
                         </>
                     )}
                 </div>

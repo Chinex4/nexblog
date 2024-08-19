@@ -35,14 +35,56 @@ class BlogController extends Controller
     public function store(Request $request)
     {
         //
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'body' => 'required|string',
+        // $request->validate([
+        //     'title' => 'required|string|min:10|max:100',
+        //     'body' => 'required|string|min:10|max:2500',
+        //     'image' => 'nullable|image|max:2048|mimes:png,jpg',
+        // ]);
+
+        // if ($request->hasFile('image')) {
+        //     $request->user()->image = $request->file('image')->store('images', 'public');
+        // }
+
+        // $blog = $request->user()->blogs()->create($request->only('title', 'body', 'image'));
+
+        // return redirect()->route('blogs.index')->with('message', 'Blog created successfully');
+
+        // $request->validate([
+        //     'title' => 'required|string|min:10|max:100',
+        //     'body' => 'required|string|min:10|max:2500',
+        //     'image' => 'nullable|image|max:2048|mimes:png,jpg',
+        // ]);
+
+        // $data = $request->only('title', 'body');
+
+        // // Handle the image upload
+        // if ($request->hasFile('image')) {
+        //     // Store the image in the 'public/images' directory
+        //     $data['image'] = $request->file('image')->store('images', 'public');
+        // }
+
+        // // Create the blog with the validated data and the image path
+        // $blog = $request->user()->blogs()->create($data);
+
+        // return redirect()->route('blogs.index')->with('message', 'Blog created successfully');
+
+        $inputData = $request->validate([
+            'title' => 'required|string|min:10|max:100',
+            'body' => 'required|string|min:10|max:2500',
+            'image' => 'nullable|image|max:2048|mimes:png,jpg',
         ]);
 
-        $blog = $request->user()->blogs()->create($request->only('title', 'body'));
+        if ($request->hasFile('image')) {
+            // Store the image in the 'public/images' directory
+            $inputData['image'] = $request->file('image')->store('images', 'public');
+        } else {
+            $inputData['image'] = 'images/default-blog.jpg';
+        }
+        $inputData['user_id'] = $request->user()->id;
 
-        return redirect()->route('blogs.index')->with('message', 'Blog created successfully');
+        $blog = Blog::create($inputData);
+
+        return to_route('blogs.show', $blog)->with('message', 'Post was created successfully.');
     }
 
     /**
@@ -68,18 +110,35 @@ class BlogController extends Controller
     public function update(Request $request, Blog $blog)
     {
         // Ensure the authenticated user is the owner of the blog
-        $this->authorize('update', $blog);
+        // $this->authorize('update', $blog);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'body' => 'required|string',
+        // $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'body' => 'required|string',
+        //     // 'image' => 'nullable|image|max:2048|mimes:png,jpg'
+        // ]);
+
+        // $blog->update($request->only('title', 'body'));
+
+        // return redirect()->route('blogs.index')->with('success', 'Post updated successfully');
+
+        $inputData = $request->validate([
+            'title' => 'required|string|min:10|max:100',
+            'body' => 'required|string|min:10|max:2500',
+            // 'image' => 'nullable|image|max:2048|mimes:png,jpg',
         ]);
 
-        $blog->update($request->only('title', 'body'));
+        // if ($request->hasFile('image')) {
+        //     # code...
+        //     $inputData['image'] = $request->file('image')->store('images', 'public');
+        // } else {
+        //     $inputData['image'] = 'images/default-blog.jpg';
+        // }
 
-        return redirect()->route('blogs.index')->with('success', 'Blog updated successfully');
+        $blog->update($inputData);
+
+        return to_route('blogs.show', $blog)->with('message', 'Post was updated successfully');
     }
-
     public function destroy(Blog $blog)
     {
         // Ensure the authenticated user is the owner of the blog

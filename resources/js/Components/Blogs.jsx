@@ -2,6 +2,7 @@ import { Link } from "@inertiajs/react";
 import React from "react";
 
 const Blogs = ({ blogs, auth }) => {
+    // console.log(blogs.image);
     return (
         <>
             {blogs ? (
@@ -11,18 +12,41 @@ const Blogs = ({ blogs, auth }) => {
                             className="border px-6 py-8 rounded-lg space-y-4"
                             key={blog.id}
                         >
-                            <h1 className="text-xl font-bold truncate">{blog.title}</h1>
-                            <p className="text-xs truncate">{blog.title}</p>
-                            <p>
+                            <div className="h-44 overflow-hidden">
+                                <img
+                                    className="rounded-md"
+                                    src={
+                                        blog.image
+                                            ? `/storage/${blog.image}`
+                                            : "/images/default-blog.jpg"
+                                    }
+                                    alt="blog-image"
+                                />
+                            </div>
+                            <h1 className="text-xl font-bold truncate capitalize">
+                                {blog.title}
+                            </h1>
+                            <p className="text-xs truncate">{blog.body}</p>
+                            <Link href={route('profile.show', blog.user)} className="flex space-x-3 items-center">
                                 <span>By {blog.user.name}</span>
-                            </p>
+                                <span className="size-6 grid place-items-center border border-gray-300 overflow-hidden rounded-full">
+                                    <img
+                                        src={
+                                            blog.user.image
+                                                ? `/storage/${blog.user.image}`
+                                                : "/images/default-profile.jpg"
+                                        }
+                                        alt="profile image"
+                                    />
+                                </span>
+                            </Link>
                             {auth.user && (
                                 <>
                                     <Link
                                         className="inline-block rounded-lg mt-8 bg-blue-500 px-4 py-2"
                                         href={`/blogs/${blog.id}`}
                                     >
-                                        View Blog
+                                        Read Post...
                                     </Link>
                                 </>
                             )}

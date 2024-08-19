@@ -20,7 +20,14 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'image',
+        'bio'
     ];
+
+    public function getProfilePictureUrlAttribute()
+    {
+        return $this->profile_picture ? asset('storage/' . $this->image) : asset('images/default-profile.jpg');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -48,5 +55,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function blogs()
     {
         return $this->hasMany(Blog::class);
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follower_user', 'user_id');
+    }
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follower_user', 'follower_id', 'user_id');
     }
 }

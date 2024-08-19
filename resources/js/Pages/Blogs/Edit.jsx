@@ -1,11 +1,16 @@
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import React, { useState } from "react";
-import { useForm } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
+import InputLabel from "@/Components/InputLabel";
+import TextareaInput from "@/Components/TextareaInput";
+import InputError from "@/Components/InputError";
+import TextInput from "@/Components/TextInput";
 
 const Edit = ({ auth, blog }) => {
-    const { data, setData, put, errors } = useForm({
+    const { data, setData, put, errors, progress } = useForm({
         title: blog.title,
         body: blog.body,
+        image: blog.image,
     });
 
     const handleSubmit = (e) => {
@@ -22,47 +27,86 @@ const Edit = ({ auth, blog }) => {
                 </h2>
             }
         >
+            <Head title="Edit Post" />
+
             <div className="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <form
                     onSubmit={handleSubmit}
                     className="space-y-4 w-full lg:w-[35rem] mx-auto"
                 >
-                    <div>
-                        <label className="text-white text-xl">Title</label>{" "}
-                        <br />
-                        <input
-                            type="text"
+                    <div className="px-4">
+                        <InputLabel
+                            className="md:text-lg"
+                            htmlFor="title"
+                            value="Title"
+                        />
+                        <TextInput
+                            id="title"
+                            className="mt-1 block w-full uppercase"
                             value={data.title}
                             onChange={(e) => setData("title", e.target.value)}
-                            className="w-full uppercase"
+                            autoComplete="title"
                         />
                         {errors.title && (
-                            <p className="text-red-500 text-xs">
-                                {errors.title}
-                            </p>
+                            <InputError
+                                className="mt-2"
+                                message={errors.title}
+                            />
                         )}
                     </div>
-                    <div>
-                        <label className="text-white text-xl">Body</label>{" "}
-                        <br />
-                        <textarea
+                    <div className="px-4">
+                        <InputLabel
+                            className="md:text-lg"
+                            htmlFor="body"
+                            value="Body"
+                        />
+
+                        <TextareaInput
+                            id="body"
                             value={data.body}
                             onChange={(e) => setData("body", e.target.value)}
                             className="w-full"
                             rows="14"
-                        ></textarea>
-                        {errors.title && (
-                            <p className="text-red-500 text-xs">
-                                {errors.title}
-                            </p>
+                        ></TextareaInput>
+                        {errors.body && (
+                            <InputError
+                                className="mt-2"
+                                message={errors.body}
+                            />
                         )}
                     </div>
-                    <button
-                        className="bg-green-700 text-white px-7 py-2 rounded-md hover:bg-green-700/50 transition-all duration-300"
-                        type="submit"
-                    >
-                        Save
-                    </button>
+                    {/* <div className="px-4">
+                        <InputLabel
+                            htmlFor="image"
+                            value="Attach a new image (optional)"
+                        />
+
+                        <TextInput
+                            id="image"
+                            type="file"
+                            name="image"
+                            className="mt-1 block w-full"
+                            onChange={(e) =>
+                                setData("image", e.target.files[0])
+                            }
+                        />
+
+                        {progress && (
+                            <progress value={progress.percentage} max={"max"}>
+                                {progress.percentage}%
+                            </progress>
+                        )}
+
+                        <InputError className="mt-2" message={errors.image} />
+                    </div> */}
+                    <div className="px-4">
+                        <button
+                            className="bg-green-700 text-white px-7 py-2 rounded-md hover:bg-green-700/50 transition-all duration-300"
+                            type="submit"
+                        >
+                            Save
+                        </button>
+                    </div>
                 </form>
             </div>
         </Authenticated>
