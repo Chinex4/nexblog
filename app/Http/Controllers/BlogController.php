@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -34,39 +35,6 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        // $request->validate([
-        //     'title' => 'required|string|min:10|max:100',
-        //     'body' => 'required|string|min:10|max:2500',
-        //     'image' => 'nullable|image|max:2048|mimes:png,jpg',
-        // ]);
-
-        // if ($request->hasFile('image')) {
-        //     $request->user()->image = $request->file('image')->store('images', 'public');
-        // }
-
-        // $blog = $request->user()->blogs()->create($request->only('title', 'body', 'image'));
-
-        // return redirect()->route('blogs.index')->with('message', 'Blog created successfully');
-
-        // $request->validate([
-        //     'title' => 'required|string|min:10|max:100',
-        //     'body' => 'required|string|min:10|max:2500',
-        //     'image' => 'nullable|image|max:2048|mimes:png,jpg',
-        // ]);
-
-        // $data = $request->only('title', 'body');
-
-        // // Handle the image upload
-        // if ($request->hasFile('image')) {
-        //     // Store the image in the 'public/images' directory
-        //     $data['image'] = $request->file('image')->store('images', 'public');
-        // }
-
-        // // Create the blog with the validated data and the image path
-        // $blog = $request->user()->blogs()->create($data);
-
-        // return redirect()->route('blogs.index')->with('message', 'Blog created successfully');
 
         $inputData = $request->validate([
             'title' => 'required|string|min:10|max:100',
@@ -90,11 +58,61 @@ class BlogController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Blog $blog)
+    // public function show(Request $request, Blog $blog, Comment $comment)
+    // {
+    //     $blog->load(['comments.user', 'comments.likes', 'comments.replies']);
+    //     $comments = Comment::with(['user', 'replies.user'])->where('blog_id', $blog->id)->get();
+    //     return Inertia::render('Blogs/Show', [
+    //         'blog' => $blog->load('user', 'comments', 'likes'),
+    //         'likeCount' => $blog->likes->count(),
+    //         'isLiked' => $blog->likes()->where('user_id', $request->user()->id)->exists(),
+    //         'comments' => $blog->comments()->with('user')->latest()->get()->map(function ($comment) use ($request) {
+    //             return [
+    //                 'id' => $comment->id,
+    //                 'body' => $comment->body,
+    //                 'user' => $comment->user,
+    //                 'created_at' => $comment->created_at,
+    //                 'likeCount' => $comment->likes->count(),
+    //                 'isCommentLiked' => $comment->likes()->where('user_id', $request->user()->id)->exists(),
+    //                 'replies' => $comment->replies,
+    //                 'replyCount' => $comment->replies->count()
+
+    //             ];
+    //         }),
+    //     ]);
+    // }
+
+    public function show(Request $request, Blog $blog)
     {
-        //
-        return Inertia::render('Blogs/Show', ['blog' => $blog->load('user')]);
+        $blog->load(['comments.user', 'comments.likes', 'comments.replies.user']);
+
+        return Inertia::render('Blogs/Show', [
+            'blog' => $blog->load('user', 'comments', 'likes'),
+            'likeCount' => $blog->likes->count(),
+            'isLiked' => $blog->likes()->where('user_id', $request->user()->id)->exists(),
+            'isBookMarked' => $blog->bookmarks()->where('user_id', $request->user()->id)->exists(),
+            'comments' => $blog->comments()->with('user')->latest()->get()->map(function ($comment) use ($request) {
+                return [
+                    'id' => $comment->id,
+                    'body' => $comment->body,
+                    'user' => $comment->user,
+                    'created_at' => $comment->created_at,
+                    'likeCount' => $comment->likes->count(),
+                    'isCommentLiked' => $comment->likes()->where('user_id', $request->user()->id)->exists(),
+                    'replies' => $comment->replies->map(function ($reply) {
+                        return [
+                            'id' => $reply->id,
+                            'bodyy' => $reply->bodyy,
+                            'user' => $reply->user,  // Including user information for each reply
+                            'created_at' => $reply->created_at,
+                        ];
+                    }),
+                    'replyCount' => $comment->replies->count()
+                ];
+            }),
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -147,5 +165,18 @@ class BlogController extends Controller
         $blog->delete();
 
         return redirect()->route('blogs.index')->with('success', 'Blog deleted successfully');
+    }
+
+    public function toggleLike(Request $request, Blog $blog)
+    {
+        $like = $blog->likes()->where('user_id', $request->user()->id);
+
+        if ($like) {
+            $like->delete();
+        } else {
+            $blog->likes()->create(['user_id' => $request->user()->id]);
+        }
+
+        return redirect()->back();
     }
 }

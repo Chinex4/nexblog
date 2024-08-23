@@ -9,7 +9,7 @@ const Blogs = ({ blogs, auth }) => {
                 <ul className="mt-10 text-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {blogs.data.map((blog) => (
                         <li
-                            className="border px-6 py-8 rounded-lg space-y-4"
+                            className="border px-4 py-6 rounded-lg space-y-4"
                             key={blog.id}
                         >
                             <div className="h-44 overflow-hidden">
@@ -26,9 +26,9 @@ const Blogs = ({ blogs, auth }) => {
                             <h1 className="text-xl font-bold truncate capitalize">
                                 {blog.title}
                             </h1>
-                            <p className="text-xs truncate">{blog.body}</p>
-                            <Link href={route('profile.show', blog.user)} className="flex space-x-3 items-center">
-                                <span>By {blog.user.name}</span>
+                            <p className="text-sm truncate">{blog.body}</p>
+                            <Link href={route('profile.show', blog.user)} className="text-xs flex space-x-3 items-center text-white/50 hover:text-white transition-all duration-300">
+                                <span>{blog.user.name}</span>
                                 <span className="size-6 grid place-items-center border border-gray-300 overflow-hidden rounded-full">
                                     <img
                                         src={

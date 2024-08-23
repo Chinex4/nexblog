@@ -71,11 +71,12 @@ class ProfileController extends Controller
         return Redirect::route('profile.show', $request->user());
     }
 
-    public function followers(User $user)
+    public function followers(Request $request, User $user)
     {
         return Inertia::render('Profile/FollowersFollowing', [
             'users' => $user->followers()->get(),
             'type' => 'followers',
+            'isFollowing' => $request->user()->following()->where('user_id', $user->id)->exists()
         ]);
     }
 

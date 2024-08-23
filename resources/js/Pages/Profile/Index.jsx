@@ -62,24 +62,24 @@ export default function Index({
                         )}
                     </div>
 
-                    <p className="mt-4 text-gray-100">{user.bio}</p>
+                    <p className="mt-4 text-gray-100">{user.bio ? user.bio : 'Update your profile.'}</p>
 
                     <div className="flex space-x-4 mt-4">
-                        <Link href="#" className="text-gray-600">
-                            <span className="font-bold">
-                                {user.following.length
-                                    ? user.following.length
-                                    : 0}
-                            </span>{" "}
-                            Following
-                        </Link>
-                        <Link href="#" className="text-gray-600">
+                        <Link href={route("profile.followers", user.id)} className="text-gray-600">
                             <span className="font-bold">
                                 {user.followers.length
                                     ? user.followers.length
                                     : 0}
                             </span>{" "}
                             Followers
+                        </Link>
+                        <Link href={route("profile.following", user.id)} className="text-gray-600">
+                            <span className="font-bold">
+                                {user.following.length
+                                    ? user.following.length
+                                    : 0}
+                            </span>{" "}
+                            Following
                         </Link>
                     </div>
                 </div>

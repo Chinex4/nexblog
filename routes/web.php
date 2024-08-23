@@ -5,8 +5,12 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\ReplyController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PictureController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BookmarkController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -39,6 +43,19 @@ Route::get('/dashboard', function () {
 
 Route::middleware(["auth", "verified"])->group(function () {
     Route::resource('blogs', BlogController::class);
+
+    // Like routes
+    Route::post('blogs/{blog}/like', [LikeController::class, 'toggleBlogLike'])->name('blogs.like');
+    Route::post('comments/{comment}/like', [LikeController::class, 'toggleCommentLike'])->name('comments.like');
+
+    // Comment routes
+    Route::post('blogs/{blog}/comments', [CommentController::class, 'store'])->name('comments.store');
+
+    // Bookmark routes
+    Route::post('blogs/{blog}/bookmark', [BookmarkController::class, 'toggle'])->name('blogs.bookmark');
+
+    // Reply Routes
+    Route::post('comments/{comment}/reply', [ReplyController::class, 'store'])->name('replies.store');
 });
 
 Route::middleware('auth')->group(function () {
@@ -49,6 +66,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/{user}/followers', [ProfileController::class, 'followers'])->name('profile.followers');
     Route::get('/profile/{user}/following', [ProfileController::class, 'following'])->name('profile.following');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+
 });
 Route::middleware('auth')->group(function () {
     Route::post('/profile-picture-update', [PictureController::class, 'store'])->name('p_picture.store');

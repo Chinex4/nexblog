@@ -40,7 +40,7 @@ export default function Authenticated({ user, header, children }) {
                                                 className="inline-flex items-center px-3 py-2 space-x-3 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 <span className='w-10 h-10 grid place-items-center border border-gray-300 overflow-hidden rounded-full'>
-                                                    <img src={user.image ? `../storage/${user.image}` : '../images/default-profile.jpg'} alt="profile image" />
+                                                    <img src={user.image ? `/storage/${user.image}` : '/images/default-profile.jpg'} alt="profile image" />
                                                 </span>
                                                 <span>
                                                     {user.name}

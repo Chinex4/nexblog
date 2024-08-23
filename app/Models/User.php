@@ -65,4 +65,59 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(User::class, 'follower_user', 'follower_id', 'user_id');
     }
+
+    public function bookmarks()
+    {
+        return $this->belongsToMany(Blog::class, 'bookmarks', 'user_id', 'blog_id');
+    }
+    public function likedBlogs()
+    {
+        return $this->belongsToMany(Blog::class, 'likes', 'user_id', 'blog_id');
+    }
+    public function likedComments()
+    {
+        return $this->belongsToMany(Comment::class, 'likes', 'user_id', 'comment_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Check if the user has liked a specific blog.
+     *
+     * @param Blog $blog
+     * @return bool
+     */
+    public function hasLikedBlog(Blog $blog)
+    {
+        return $this->likedBlogs()->where('blog_id', $blog->id)->exists();
+    }
+
+    /**
+     * Relationship to bookmarked blogs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function bookmarkedBlogs()
+    {
+        return $this->belongsToMany(Blog::class, 'blog_user_bookmarks', 'user_id', 'blog_id');
+    }
+
+    /**
+     * Check if the user has bookmarked a specific blog.
+     *
+     * @param Blog $blog
+     * @return bool
+     */
+    public function hasBookmarkedBlog(Blog $blog)
+    {
+        return $this->bookmarkedBlogs()->where('blog_id', $blog->id)->exists();
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Reply::class);
+    }
 }
