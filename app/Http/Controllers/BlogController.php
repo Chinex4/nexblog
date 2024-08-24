@@ -55,33 +55,6 @@ class BlogController extends Controller
         return to_route('blogs.show', $blog)->with('message', 'Post was created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    // public function show(Request $request, Blog $blog, Comment $comment)
-    // {
-    //     $blog->load(['comments.user', 'comments.likes', 'comments.replies']);
-    //     $comments = Comment::with(['user', 'replies.user'])->where('blog_id', $blog->id)->get();
-    //     return Inertia::render('Blogs/Show', [
-    //         'blog' => $blog->load('user', 'comments', 'likes'),
-    //         'likeCount' => $blog->likes->count(),
-    //         'isLiked' => $blog->likes()->where('user_id', $request->user()->id)->exists(),
-    //         'comments' => $blog->comments()->with('user')->latest()->get()->map(function ($comment) use ($request) {
-    //             return [
-    //                 'id' => $comment->id,
-    //                 'body' => $comment->body,
-    //                 'user' => $comment->user,
-    //                 'created_at' => $comment->created_at,
-    //                 'likeCount' => $comment->likes->count(),
-    //                 'isCommentLiked' => $comment->likes()->where('user_id', $request->user()->id)->exists(),
-    //                 'replies' => $comment->replies,
-    //                 'replyCount' => $comment->replies->count()
-
-    //             ];
-    //         }),
-    //     ]);
-    // }
-
     public function show(Request $request, Blog $blog)
     {
         $blog->load(['comments.user', 'comments.likes', 'comments.replies.user']);
@@ -127,31 +100,11 @@ class BlogController extends Controller
 
     public function update(Request $request, Blog $blog)
     {
-        // Ensure the authenticated user is the owner of the blog
-        // $this->authorize('update', $blog);
-
-        // $request->validate([
-        //     'title' => 'required|string|max:255',
-        //     'body' => 'required|string',
-        //     // 'image' => 'nullable|image|max:2048|mimes:png,jpg'
-        // ]);
-
-        // $blog->update($request->only('title', 'body'));
-
-        // return redirect()->route('blogs.index')->with('success', 'Post updated successfully');
-
+        
         $inputData = $request->validate([
             'title' => 'required|string|min:10|max:100',
             'body' => 'required|string|min:10|max:2500',
-            // 'image' => 'nullable|image|max:2048|mimes:png,jpg',
         ]);
-
-        // if ($request->hasFile('image')) {
-        //     # code...
-        //     $inputData['image'] = $request->file('image')->store('images', 'public');
-        // } else {
-        //     $inputData['image'] = 'images/default-blog.jpg';
-        // }
 
         $blog->update($inputData);
 

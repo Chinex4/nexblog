@@ -1,18 +1,26 @@
 import { Link } from "@inertiajs/react";
+import { format } from "date-fns";
 import React from "react";
 
 const Blogs = ({ blogs, auth }) => {
     // console.log(blogs.image);
+    function truncateText(text, maxLength) {
+        if (text.length > maxLength) {
+            return text.slice(0, maxLength) + "...";
+        } else {
+            return text;
+        }
+    }
     return (
         <>
             {blogs ? (
-                <ul className="mt-10 text-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <ul className="grid grid-cols-1 gap-5 mt-10 text-white md:grid-cols-2 lg:grid-cols-3">
                     {blogs.data.map((blog) => (
                         <li
-                            className="border px-4 py-6 rounded-lg space-y-4"
+                            className="px-4 py-6 space-y-4 border rounded-lg"
                             key={blog.id}
                         >
-                            <div className="h-44 overflow-hidden">
+                            <div className="overflow-hidden h-44">
                                 <img
                                     className="rounded-md"
                                     src={
@@ -23,27 +31,43 @@ const Blogs = ({ blogs, auth }) => {
                                     alt="blog-image"
                                 />
                             </div>
-                            <h1 className="text-xl font-bold truncate capitalize">
-                                {blog.title}
+                            <h1 className="text-xl font-bold capitalize">
+                                {truncateText(blog.title, 55)}
                             </h1>
-                            <p className="text-sm truncate">{blog.body}</p>
-                            <Link href={route('profile.show', blog.user)} className="text-xs flex space-x-3 items-center text-white/50 hover:text-white transition-all duration-300">
-                                <span>{blog.user.name}</span>
-                                <span className="size-6 grid place-items-center border border-gray-300 overflow-hidden rounded-full">
-                                    <img
-                                        src={
+                            <p className="text-sm">
+                                {truncateText(blog.body, 100)}
+                            </p>
+                            <Link
+                                href={route("profile.show", blog.user)}
+                                className="flex items-center space-x-2 text-sm text-white transition-all duration-300 hover:underline"
+                            >
+                                <span
+                                    className="grid overflow-hidden border border-gray-300 rounded-full size-6 place-items-center"
+                                    style={{
+                                        backgroundImage: `url(${
                                             blog.user.image
                                                 ? `/storage/${blog.user.image}`
                                                 : "/images/default-profile.jpg"
-                                        }
-                                        alt="profile image"
-                                    />
-                                </span>
+                                        })`,
+                                        backgroundSize: "cover",
+                                        backgroundPosition: "center",
+                                        backgroundRepeat: "no-repeat",
+                                    }}
+                                ></span>
+
+                                <span>{blog.user.name}</span>
                             </Link>
+                            <p className={`text-white/50 text-xs`}>
+                                Posted{" "}
+                                {format(
+                                    new Date(blog.created_at),
+                                    "MMMM dd, yyyy"
+                                )}
+                            </p>
                             {auth.user && (
                                 <>
                                     <Link
-                                        className="inline-block rounded-lg mt-8 bg-blue-500 px-4 py-2"
+                                        className="inline-block px-4 py-2 mt-8 bg-blue-500 rounded-lg"
                                         href={`/blogs/${blog.id}`}
                                     >
                                         Read Post...

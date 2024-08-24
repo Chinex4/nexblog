@@ -23,13 +23,13 @@ const Create = ({ auth }) => {
         <Authenticated
             user={auth.user}
             header={
-                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     Create Post
                 </h2>
             }
         >
             <Head title="Create Post" />
-            <div className="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div className="py-12 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <form
                     onSubmit={handleSubmit}
                     className="space-y-4 w-full lg:w-[35rem] mx-auto"
@@ -42,7 +42,7 @@ const Create = ({ auth }) => {
                         />
                         <TextInput
                             id="title"
-                            className="mt-1 block w-full uppercase"
+                            className="block w-full mt-1 uppercase"
                             value={data.title}
                             onChange={(e) => setData("title", e.target.value)}
                             autoComplete="title"
@@ -85,7 +85,7 @@ const Create = ({ auth }) => {
                             id="image"
                             type="file"
                             name="image"
-                            className="mt-1 block w-full"
+                            className="block w-full mt-1"
                             onChange={(e) => setData("image", e.target.files[0])}
                         />
 
@@ -99,10 +99,10 @@ const Create = ({ auth }) => {
                     </div>
                     <div className="px-4">
                         <button
-                            className="bg-green-700 text-white px-7 py-2 rounded-md hover:bg-green-700/50 transition-all duration-300"
+                            className="py-2 text-white transition-all duration-300 bg-green-700 rounded-md px-7 hover:bg-green-700/50"
                             type="submit"
                         >
-                            Create
+                            Post
                         </button>
                     </div>
                 </form>

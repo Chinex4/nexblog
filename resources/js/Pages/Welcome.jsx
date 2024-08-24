@@ -29,7 +29,7 @@ export default function Welcome({ auth }) {
                             <div className="">
                                 <div className='space-y-6 grid place-items-center text-center'>
                                     <h1 className='text-6xl text-white'>Welcome to NexBlog</h1>
-                                    <p className='w-[50rem]'>
+                                    <p className='w-full lg:w-[50rem]'>
                                         Dive into the world of ideas, stories, and inspiration.
                                         At NexBlog, we bring together a community of curious minds
                                         eager to share their thoughts, experiences, and expertise.

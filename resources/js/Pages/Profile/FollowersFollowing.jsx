@@ -13,15 +13,15 @@ export default function FollowersFollowing({ auth, users, type, isFollowing }) {
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    {`${auth.user.name}'s ${type}`}
+                <h2 className="text-xl font-semibold leading-tight text-gray-800 capitalize dark:text-gray-200">
+                    {`${type}`}
                 </h2>
             }
         >
             <Head title={`${auth.user.name}'s ${type}`} />
 
-            <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <h1 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-gray-100">
                     {type === "followers" ? "Followers" : "Following"}
                 </h1>
                 {users.length > 0 ? (
@@ -42,7 +42,7 @@ export default function FollowersFollowing({ auth, users, type, isFollowing }) {
                                             : "/images/default-profile.jpg"
                                     }
                                     alt="Profile Picture"
-                                    className="w-12 h-12 rounded-full border border-gray-300 dark:border-gray-700"
+                                    className="w-12 h-12 border border-gray-300 rounded-full dark:border-gray-700"
                                 />
                                 <span className="ml-4 text-lg font-medium text-gray-900 dark:text-gray-100">
                                     {user.name}

@@ -29,13 +29,16 @@ Route::get('/explore-blogs', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    $blogs = Blog::with('user')->latest()->paginate();
+// Route::get('/dashboard', function () {
+//     $blogs = Blog::with('user')->latest()->paginate();
 
-    return Inertia::render('Dashboard', [
-        'blogs' => $blogs,
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+//     return Inertia::render('Dashboard', [
+//         'blogs' => $blogs,
+//     ]);
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::redirect('/dashboard', '/blogs')->middleware(['auth', 'verified'])->name('dashboard');
+
 
 // Route::get('/blogs', function () {
 //     return Inertia::render('Blogs/Index');

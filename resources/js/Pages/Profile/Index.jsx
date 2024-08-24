@@ -22,14 +22,14 @@ export default function Index({
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     Profile
                 </h2>
             }
         >
             <Head title="Profile" />
 
-            <div className="max-w-4xl mx-auto p-4 text-white">
+            <div className="max-w-4xl p-4 mx-auto text-white">
                 {/* Header Section */}
                 <div className="relative h-48 bg-gray-800 rounded-lg">
                     <img
@@ -39,13 +39,13 @@ export default function Index({
                                 : "../images/default-profile.jpg"
                         }
                         alt={`${user.name}'s profile`}
-                        className="absolute left-4 bottom-0 size-40 rounded-full border-4 border-white"
+                        className="absolute bottom-0 border-4 border-white rounded-full lg:left-4 size-32 lg:size-40"
                     />
                 </div>
 
                 {/* User Info Section */}
                 <div className="mt-8">
-                    <div className="flex justify-between items-center">
+                    <div className="flex items-center justify-between">
                         <div>
                             <h2 className="text-2xl font-bold">{user.name}</h2>
                             <p className="text-gray-600">Email: {user.email}</p>
@@ -54,7 +54,7 @@ export default function Index({
                             <div>
                                 <Link
                                     href={route("profile.edit")}
-                                    className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                                    className="px-4 py-2 text-white bg-blue-500 rounded-md"
                                 >
                                     Edit Profile
                                 </Link>
@@ -64,7 +64,7 @@ export default function Index({
 
                     <p className="mt-4 text-gray-100">{user.bio ? user.bio : 'Update your profile.'}</p>
 
-                    <div className="flex space-x-4 mt-4">
+                    <div className="flex mt-4 space-x-4">
                         <Link href={route("profile.followers", user.id)} className="text-gray-600">
                             <span className="font-bold">
                                 {user.followers.length
@@ -104,7 +104,7 @@ export default function Index({
                 {/* users posts */}
                 <div className="my-8">
                     {/* Display followers and following lists conditionally based on user actions */}
-                    <h1 className="font-bold text-2xl">My Posts</h1>
+                    <h1 className="text-2xl font-bold">My Posts</h1>
                     <Blogs auth={auth} blogs={blogs}/>
                 </div>
             </div>

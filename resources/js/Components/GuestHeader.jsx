@@ -4,13 +4,13 @@ import React from "react";
 const GuestHeader = ({ auth }) => {
     const { url } = usePage()
     return (
-        <header className="flex lg:justify-between items-center gap-2 py-10 lg:grid-cols-3">
+        <header className="flex items-center gap-2 py-10 lg:justify-between lg:grid-cols-3">
             <div className="flex lg:justify-center ">
                 <h1 className="text-3xl text-white">
                     Nex<span className="font-bold">Blog</span>{" "}
                 </h1>
             </div>
-            <nav className="-mx-3 flex flex-1 justify-end">
+            <nav className="flex justify-end flex-1 -mx-3 text-xs md:text-lg">
                 {auth.user ? (
                     <Link
                         href={route("dashboard")}
